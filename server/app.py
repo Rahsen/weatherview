@@ -1,10 +1,12 @@
 import os
 from flask import Flask, render_template, request, jsonify
+from flask.ext.cors import CORS
 import weatherdata
 
 print("starting flask app with name:", __name__)
 app = Flask(__name__, static_folder="../dist")
 app.config['DEBUG'] = (os.environ.get('DEBUG', 'False').lower() == "true")
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 apikey_google = os.environ['GOOGLE_API_KEY']
 apikey_forecastio = os.environ['FORECASTIO_API_KEY']
