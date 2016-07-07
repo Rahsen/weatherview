@@ -1,5 +1,7 @@
 .*
-!.envs.example
+!.env.example
 !.gitignore
 
 __pycache__/
+dist/
+node_modules/
