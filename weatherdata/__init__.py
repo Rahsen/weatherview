@@ -56,12 +56,6 @@ class WeatherStats:
                 self._stats['datefrom'] = date
             self._stats['dateto'] = date
 
-            if 'lat' not in self._stats and 'latitude' in data:
-                self._stats['lat'] = data['latitude']
-
-            if 'lng' not in self._stats and 'longitude' in data:
-                self._stats['lat'] = data['longitude']
-
             hourly_data = data.get('hourly', {})
             data_points = hourly_data.get('data', [])
             for data_point in data_points:
@@ -78,15 +72,23 @@ class WeatherStats:
 
     def get(self):
         if len(self._temps) > 0:
-            self._stats['temp_min'] = min(x for x in self._temps)
-            self._stats['temp_max'] = max(x for x in self._temps)
-            self._stats['temp_avg'] = statistics.mean(self._temps)
-            self._stats['temp_med'] = statistics.median(self._temps)
+            tmin = min(x for x in self._temps)
+            tmax = max(x for x in self._temps)
+            tavg = statistics.mean(self._temps)
+            tmed = statistics.median(self._temps)
+            data_temp = {}
+            data_temp['labels'] = ['Min', 'Avg', 'Med', 'Max']
+            data_temp['data'] = [tmin, tavg, tmed, tmax]
+            self._stats['temperature'] = data_temp
         if len(self._hums) > 0:
-            self._stats['hum_min'] = min(x for x in self._hums)
-            self._stats['hum_max'] = max(x for x in self._hums)
-            self._stats['hum_avg'] = statistics.mean(self._hums)
-            self._stats['hum_med'] = statistics.median(self._hums)
+            hmin = min(x for x in self._hums)
+            hmax = max(x for x in self._hums)
+            havg = statistics.mean(self._hums)
+            hmed = statistics.median(self._hums)
+            data_hum = {}
+            data_hum['labels'] = ['Min', 'Avg', 'Med', 'Max']
+            data_hum['data'] = [hmin, havg, hmed, hmax]
+            self._stats['humidity'] = data_hum
         return self._stats
 
 
