@@ -69,8 +69,6 @@ class WeatherStats:
                     dp_date = datetime.fromtimestamp(data_point['time']).date().isoformat()
                     if dp_date == date:
                         self._process_data_point(data_point)
-                    else:
-                        print("...skipping", dp_date, date)
 
     def _process_data_point(self, data):
         if 'temperature' in data:
