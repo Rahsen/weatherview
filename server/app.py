@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, jsonify
-from flask.ext.cors import CORS
+from flask_cors import CORS
 import weatherdata
 
 print("starting flask app with name:", __name__)

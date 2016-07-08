@@ -4,17 +4,68 @@
     <meta charset="utf-8">
     <title>Weather View</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
 </head>
 <body>
     <h1> Welcome to Weather View </h1>
-    <div id="app"></div>
+    <br>
     <p>
-        <form action="">
-            City / Address:
-            <input type="text" name="city" placeholder="London">
+        <form>
+            City / Address:<br>
+            <input id="input-address" type="text" name="city" placeholder="London"><br>
 
-            <input type="submit" value="Submit">
+            <input id="clickme" type="submit" value="Submit">
         </form>
     </p>
+<canvas id="myChart"></canvas>
+<script>
+$("#clickme").click(function() {
+    var city = $('#input-address').val();
+    if (city === "") {
+        city = "London";
+    }
+});
+
+ var jsonData = $.ajax({
+      url: 'http://weatherview.herokuapp.com/api/wxstats/london',
+      dataType: 'json',
+    }).done(function (results) {
+
+      var labels = results.stats[0].stats.humidity.labels;
+      var humdata= results.stats[0].stats.humidity.data;
+      var tempdata= results.stats[0].stats.temperature.data;
+
+var ctx = document.getElementById("myChart").getContext("2d");
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Humidity',
+            data: humdata,
+            backgroundColor: "rgba(179,181,198,0.2)",
+            borderColor: "rgba(179,181,198,1)",
+            pointBackgroundColor: "rgba(179,181,198,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgba(179,181,198,1)"
+        },
+        {
+            label: 'Temperature',
+            data: tempdata,
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            pointBackgroundColor: "rgba(255,99,132,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgba(255,99,132,1)"
+        }]
+    }
+})
+});
+
+</script>
 </body>
 </html>
